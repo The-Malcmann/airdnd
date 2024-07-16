@@ -5,7 +5,7 @@
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
 const { UnauthorizedError } = require("../expressError");
-
+const Group = require("../models/group");
 
 /** Middleware: Authenticate user.
  *
@@ -89,10 +89,28 @@ function ensureCorrectUserOrAdmin(req, res, next) {
   }
 }
 
+async function ensureHost(req, res, next) {
+  try {
+
+    const user = res.locals.user;
+    const group = await Group.get(req.params.id)
+    const host = group.host
+
+    if(!user || user.username !== host) { 
+      throw new UnauthorizedError();
+    }
+    return next()
+  } catch (err) {
+    return next(err);
+  }
+
+}
+
 
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
   ensureAdmin,
   ensureCorrectUserOrAdmin,
+  ensureHost
 };

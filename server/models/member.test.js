@@ -40,15 +40,27 @@ describe("Add", function () {
         }
     })
 })
-describe("findAll", function () {
+describe("findAllMemberForGroup", function () {
     test("pending works", async function () {
         const newMember = await Member.add('admin', 1);
-        const pendingMembers = await Member.findAll(1, false);
+        const pendingMembers = await Member.findAllMembersForGroup(1, false);
         expect(pendingMembers[0]).toEqual({ userId: 'admin', groupId: 1, isAccepted: false, isDm: false });
     })
     
     test("accepted works", async function () {
-        const activeMembers = await Member.findAll(1, true);
+        const activeMembers = await Member.findAllMembersForGroup(1, true);
+        expect(activeMembers[0]).toEqual({ userId: 'u1', groupId: 1, isAccepted: true, isDm: true });
+    })
+})
+describe("findAllGroupsForMembers", function () {
+    test("pending works", async function () {
+        const newMember = await Member.add('admin', 1);
+        const pendingMembers = await Member.findAllGroupsForMember('admin', false);
+        expect(pendingMembers[0]).toEqual({ userId: 'admin', groupId: 1, isAccepted: false, isDm: false });
+    })
+    
+    test("accepted works", async function () {
+        const activeMembers = await Member.findAllGroupsForMember('u1', true);
         expect(activeMembers[0]).toEqual({ userId: 'u1', groupId: 1, isAccepted: true, isDm: true });
     })
 })

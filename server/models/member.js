@@ -8,31 +8,37 @@ const {
     BadRequestError,
     UnauthorizedError,
 } = require("../expressError");
-
+const Group = require("./group")
 class Member {
-    static async add(userId, groupId) {
+    static async add(userId, groupId, isAccepted) {
         if (!userId || !groupId) {
             throw new BadRequestError("must specify a userId (username) and a groupId");
         }
-        if (typeof userId != "string" || typeof groupId != "number") {
-            throw new BadRequestError("userId (username) must be a string and groupId must be a number");
-        }
+        // if (typeof userId != "string" || typeof groupId != "number") {
+        //     throw new BadRequestError("userId (username) must be a string and groupId must be a number");
+        // }
+        if(!isAccepted) isAccepted = false;
         const result = await db.query(`
-            INSERT INTO members(user_id, group_id)
-            VALUES($1, $2)
-            RETURNING user_id, group_id
+            INSERT INTO members(user_id, group_id, is_accepted)
+            VALUES($1, $2, $3)
+            RETURNING user_id as "userId", group_id as "groupId"
         `,
-            [userId, groupId]
+            [userId, groupId, isAccepted]
         );
-
         const member = result.rows[0]
+        const currentPlayers = (await Group.get(groupId)).currentPlayers
+        console.log("currentPlayers", currentPlayers)
+        console.log("newCurrentPlayers", currentPlayers+1)
 
+
+        // increase current players total for given group
+        await Group.update(groupId, { currentPlayers: currentPlayers + 1 })
 
         return member;
 
     }
 
-    static async findAll(groupId, acceptedStatus) {
+    static async findAllMembersForGroup(groupId, acceptedStatus) {
 
         const result = await db.query(`
                 SELECT user_id as "userId", group_id AS "groupId", is_accepted as "isAccepted", is_dm as "isDm"
@@ -43,6 +49,18 @@ class Member {
             groupId, acceptedStatus
         ]);
 
+        return result.rows;
+    }
+
+    static async findAllGroupsForMember(userId, acceptedStatus) {
+        const result = await db.query(`
+            SELECT user_id as "userId", group_id AS "groupId", is_accepted as "isAccepted", is_dm as "isDm"
+            FROM members
+            WHERE user_id = $1 AND is_accepted = $2 
+            ORDER BY group_id
+            `, [
+            userId, acceptedStatus
+        ]);
         return result.rows;
     }
 
@@ -60,7 +78,7 @@ class Member {
     }
 
     static async update(userId, groupId, data) {
-        if(!data) throw new BadRequestError("Must provide data to update")
+        if (!data) throw new BadRequestError("Must provide data to update")
 
         const { setCols, values } = sqlForPartialUpdate(
             data,
@@ -89,17 +107,19 @@ class Member {
 
     static async remove(userId, groupId) {
         let result = await db.query(
-              `DELETE
+            `DELETE
                FROM members
                WHERE user_id = $1 AND group_id = $2
                RETURNING user_id as "userId", group_id as "groupId"`,
             [userId, groupId],
         );
         const member = result.rows[0];
-    
-        if (!member) throw new NotFoundError(`No member: ${userId}, ${groupId}`);
 
+        if (!member) throw new NotFoundError(`No member: ${userId}, ${groupId}`);
+        const currentPlayers = (await Group.get(groupId)).currentPlayers
+        // increase current players total for given group
+        await Group.update(groupId, { currentPlayers: currentPlayers - 1 })
         return member
-      }
+    }
 }
 module.exports = Member;

@@ -45,10 +45,11 @@ async function commonBeforeAll() {
     isActive: true,
     isRemote: true,
     maxPlayers: 6,
-    isPublic: true
+    isPublic: true,
   });
 
-  await Member.add("u1", 1);
+  await Member.add("u1", 1, true);
+  await Member.add("u2", 1, false);
 }
 
 async function commonBeforeEach() {

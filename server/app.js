@@ -9,6 +9,7 @@ const { NotFoundError } = require("./expressError");
 
 const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");
+const membersRoutes = require("./routes/members");
 
 
 
@@ -22,6 +23,8 @@ app.use(morgan("tiny"));
 
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
+app.use("/members", membersRoutes);
+
 
 
 
