@@ -2,7 +2,8 @@
 
 const db = require("../db.js");
 const User = require("../models/user");
-const Member = require("../models/user");
+const Member = require("../models/member");
+const Group = require("../models/group");
 const { createToken } = require("../helpers/tokens");
 
 const testJobIds = [];
@@ -15,6 +16,7 @@ async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM members");
 
+  await db.query(`ALTER SEQUENCE groups_id_seq RESTART WITH 1`);
 
   await User.register({
     username: "u1",
@@ -35,6 +37,18 @@ async function commonBeforeAll() {
     isAdmin: false,
   });
 
+  await Group.add({
+    host: "u1",
+    title: "u1's group",
+    description: "this is gonna be an intense hardcore mode style game, so gear up",
+    gameEdition: "5th",
+    isActive: true,
+    isRemote: true,
+    maxPlayers: 6,
+    isPublic: true
+  });
+
+  await Member.add("u1", 1);
 }
 
 async function commonBeforeEach() {
