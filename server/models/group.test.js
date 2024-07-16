@@ -48,7 +48,8 @@ describe("add class method", function () {
             isRemote: false,
             maxPlayers: 4,
             isPublic: true,
-            location: 'Reno, NV'
+            location: 'Reno, NV',
+            currentPlayers: 1
         });
     });
 
@@ -69,7 +70,8 @@ describe("add class method", function () {
             isRemote: false,
             maxPlayers: 7,
             isPublic: true,
-            location: null
+            location: null,
+            currentPlayers: 1
         });
     });
 
@@ -116,7 +118,8 @@ describe("findAll class method", function () {
                 isRemote: true,
                 maxPlayers: 6,
                 isPublic: true,
-                location: 'Reno, NV'
+                location: 'Reno, NV',
+                currentPlayers: 1
             }
         ]);
     });
@@ -137,7 +140,8 @@ describe("get class method", function () {
             isRemote: true,
             maxPlayers: 6,
             isPublic: true,
-            location: 'Reno, NV'
+            location: 'Reno, NV',
+            currentPlayers: 1
         });
     });
 
@@ -166,7 +170,8 @@ describe("update class method", function () {
             isRemote: false,
             maxPlayers: 8,
             isPublic: false,
-            location: 'new location'
+            location: 'new location',
+            currentPlayers: 2
         });
 
         expect(result).toEqual({
@@ -179,7 +184,8 @@ describe("update class method", function () {
             isRemote: false,
             maxPlayers: 8,
             isPublic: false,
-            location: 'new location'
+            location: 'new location',
+            currentPlayers: 2
         });
     });
 
@@ -203,7 +209,8 @@ describe("update class method", function () {
             isRemote: false,
             maxPlayers: 8,
             isPublic: true,
-            location: 'Reno, NV'
+            location: 'Reno, NV',
+            currentPlayers: 1
         });
     });
 
