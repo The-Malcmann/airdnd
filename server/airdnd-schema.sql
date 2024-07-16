@@ -14,7 +14,7 @@ CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
     description TEXT,
-    host VARCHAR(25) REFERENCES users(username),
+    host VARCHAR(25) REFERENCES users(username) ON DELETE CASCADE,
     game_edition VARCHAR(50),
     is_active BOOLEAN DEFAULT TRUE,
     is_remote BOOLEAN DEFAULT FALSE,
@@ -24,8 +24,8 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE members (
-    user_id VARCHAR(25) REFERENCES users(username),
-    group_id INT REFERENCES groups(id),
+    user_id VARCHAR(25) REFERENCES users(username) ON DELETE CASCADE,
+    group_id INT REFERENCES groups(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, group_id),
     is_accepted BOOLEAN DEFAULT FALSE,
     is_dm BOOLEAN DEFAULT FALSE
