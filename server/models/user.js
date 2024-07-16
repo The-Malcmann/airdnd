@@ -47,7 +47,7 @@ class User {
       [
         username,
         hashedPassword,
-        email,
+        giemail,
         isAdmin,
       ],
   );
