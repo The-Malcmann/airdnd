@@ -214,9 +214,13 @@ class Group {
         RETURNING id`,
         [id]
     );
-    // access returned id
-    let removedId = query.rows[0].id;
 
+    // access removed id
+    const removedId = query.rows[0];
+
+    if( !removedId ) throw new NotFoundError(`No group: ${id}`);
+
+    return {message: `Group ${id} removed.`};
   }
 }
 

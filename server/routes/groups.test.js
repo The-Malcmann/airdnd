@@ -11,7 +11,8 @@ const {
     commonBeforeEach,
     commonAfterEach,
     commonAfterAll,
-    adminToken
+    adminToken,
+    u1Token
 } = require("./_testCommon");
 
 // Set Up & Tear Down
@@ -77,7 +78,7 @@ describe("GET /groups", function () {
                     maxPlayers: 6,
                     isPublic: true,
                     location: null,
-                    currentPlayers: 1
+                    currentPlayers: 3
                 }
             ]
         });
@@ -101,8 +102,53 @@ describe("GET /groups/:id", function () {
                 maxPlayers: 6,
                 isPublic: true,
                 location: null,
-                currentPlayers: 1
+                currentPlayers: 3
             }
         });
     });
 });
+
+/****************************** PATCH /groups/:id */
+describe("PATCH /groups/:id", function () {
+    test("works", async function () {
+        const res = await request(app)
+            .patch("/groups/1")
+            .send({
+                host: 'u1',
+                title: "new title",
+                description: "new description",
+                gameEdition: "3.5",
+                isRemote: false,
+            })
+            .set("authorization", `Bearer ${u1Token}`);
+
+        expect(res.body).toEqual({
+            group: {
+                id: 1,
+                host: "u1",
+                title: "new title",
+                description: "new description",
+                gameEdition: "3.5",
+                isActive: true,
+                isRemote: false,
+                maxPlayers: 6,
+                isPublic: true,
+                location: null,
+                currentPlayers: 3
+            }
+        });
+    });
+});
+
+/****************************** DELETE /groups/:id */
+describe("DELETE /groups/:id", function () {
+    test("works", async function () {
+        const res = await request(app)
+            .delete("/groups/1")
+            .set("authorization", `Bearer ${u1Token}`);
+        
+        expect(res.body).toEqual({
+            message: "Group 1 removed."
+        })
+    });
+})

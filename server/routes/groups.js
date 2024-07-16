@@ -7,7 +7,8 @@ const express = require("express");
 const { authenticateJWT, 
     ensureAdmin, 
     ensureCorrectUserOrAdmin, 
-    ensureLoggedIn} = require("../middleware/auth");
+    ensureLoggedIn,
+    ensureHost} = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
 const Group = require("../models/group");
 const groupNewSchema = require("../schemas/groupNew.json");
@@ -77,13 +78,39 @@ router.get("/:id", async function(req, res, next) {
 /** PATCH /groups/:id
  * Updates a group at id
  * 
+ * Req.body can include: {id, host, gameEdition, isActive, isRemote, maxPlayers, isPublic, location, currentPlayers}
+ * 
  * Returns: {group:  {id, host, gameEdition, isActive, isRemote, maxPlayers, isPublic, location, currentPlayers}}
  * 
  * auth: is host or admin
  */
-router.patch("/:id", async function () {
+router.patch("/:id", authenticateJWT, ensureHost, async function (req, res, next) {
     try{
         const validator = jsonschema.validate(req.body, groupUpdateSchema);
+        if(!validator.valid) {
+            const errs = validator.errors.map(e => e.stack);
+            throw new BadRequestError(errs);
+        }
+
+        const group = await Group.update(req.params.id, req.body);
+        return res.json({ group });
+    }
+    catch (err) {
+        return next(err);
+    }
+});
+
+/** DELETE /groups/:id
+ * Removes a group at id
+ * 
+ * Returns: {message}
+ * 
+ * auth: Host or admin
+ */
+router.delete("/:id", authenticateJWT, ensureHost, async function(req, res, next) {
+    try{
+        const message = await Group.remove(req.params.id);
+        return res.json(message);
     }
     catch (err) {
         return next(err);

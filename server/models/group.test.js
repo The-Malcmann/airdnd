@@ -253,7 +253,9 @@ describe("remove class method", function () {
     test("works", async function () {
         // use Group.remove on 1
         const removed = await Group.remove(1);
-        expect(removed).toEqual(undefined);
+        expect(removed).toEqual({
+            message: "Group 1 removed."
+        });
 
         try{
             await Group.get(1);
