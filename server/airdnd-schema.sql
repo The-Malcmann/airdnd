@@ -20,7 +20,8 @@ CREATE TABLE groups (
     is_remote BOOLEAN DEFAULT FALSE,
     max_players INT DEFAULT 7, 
     is_public BOOLEAN DEFAULT TRUE,
-    location VARCHAR(75)
+    location VARCHAR(75),
+    current_players INT DEFAULT 1
 );
 
 CREATE TABLE members (
