@@ -39,7 +39,8 @@ class Group {
             isActive: "is_active",
             isRemote: "is_remote",
             maxPlayers: "max_players",
-            isPublic: "is_public"
+            isPublic: "is_public",
+            currentPlayers: "current_players"
         }
     );
 
@@ -60,7 +61,9 @@ class Group {
             is_remote AS "isRemote",
             max_players AS "maxPlayers",
             is_public AS "isPublic",
-            location`;
+            location,
+            current_players AS "currentPlayers"
+            `;
     // try to insert into groups
     const query = await db.query(queryString, [...values]);
 
@@ -85,7 +88,8 @@ class Group {
                is_remote AS "isRemote",
                max_players AS "maxPlayers",
                is_public AS "isPublic",
-               location
+               location,
+               current_players AS "currentPlayers"
         FROM groups
         ORDER BY id`
     );
@@ -115,7 +119,8 @@ class Group {
                is_remote AS "isRemote",
                max_players AS "maxPlayers",
                is_public AS "isPublic",
-               location
+               location,
+               current_players AS "currentPlayers"
         FROM groups
         WHERE id = $1`,
         [id]
@@ -157,6 +162,7 @@ class Group {
             isRemote: "is_remote",
             maxPlayers: "max_players",
             isPublic: "is_public",
+            currentPlayers: "current_players"
         }
     );
 
@@ -176,7 +182,9 @@ class Group {
                                    is_remote AS "isRemote",
                                    max_players AS "maxPlayers",
                                    is_public AS "isPublic",
-                                   location`;
+                                   location,
+                                   current_players AS "currentPlayers"
+                                   `;
     
     // make query with queryString and values
     const query = await db.query(queryString, [...values, id]);
@@ -208,6 +216,7 @@ class Group {
     );
     // access returned id
     let removedId = query.rows[0].id;
+
   }
 }
 
