@@ -13,7 +13,7 @@ const {
     commonAfterEach,
     commonAfterAll,
     testJobIds,
-} = require("./_testCommon");
+} = require("./_testCommon.js");
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
@@ -190,7 +190,7 @@ describe("update", function () {
     expect.assertions(1);
     try {
       await User.update("c1", {});
-      fail();
+      fail();n
     } catch (err) {
       expect(err instanceof BadRequestError).toBeTruthy();
     }
