@@ -24,9 +24,9 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE members (
-    member_id VARCHAR(25) REFERENCES users(username),
+    user_id VARCHAR(25) REFERENCES users(username),
     group_id INT REFERENCES groups(id),
-    PRIMARY KEY (member_id, group_id),
+    PRIMARY KEY (user_id, group_id),
     is_accepted BOOLEAN DEFAULT FALSE,
     is_dm BOOLEAN DEFAULT FALSE
 );

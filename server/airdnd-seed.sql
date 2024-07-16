@@ -5,6 +5,6 @@ VALUES ('testuser', '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5
 INSERT INTO groups(title, description, host, game_edition, is_active, is_remote, max_players, is_public)
 VALUES ('Testusers group', 'lorem ipscum', 'testuser', '5th edition', true, true, 6, true);
 
-INSERT INTO members(member_id, group_id, is_accepted, is_dm)
+INSERT INTO members(user_id, group_id, is_accepted, is_dm)
 VALUES ('testuser', 1, true, true);
 
