@@ -11,9 +11,7 @@ function createToken(user) {
     username: user.username,
     isAdmin: user.isAdmin || false,
   };
-  console.log("createToken SECRET_KEY: ", SECRET_KEY);
   const signature = jwt.sign(payload, SECRET_KEY)
-  console.log("createToken signature: ", signature);
   return signature;
 }
 
