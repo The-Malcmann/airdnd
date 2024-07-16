@@ -11,6 +11,7 @@ const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");
 const membersRoutes = require("./routes/members");
 
+const groupsRoutes = require("./routes/groups")
 
 
 const morgan = require("morgan");
@@ -25,6 +26,7 @@ app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/members", membersRoutes);
 
+app.use("/groups", groupsRoutes);
 
 
 
