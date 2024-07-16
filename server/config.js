@@ -5,7 +5,6 @@
 // Imports
 require("dotenv").config();
 
-// console.log("Process Env Object: ", process.env);
 
 // Access SECRET_KEY for export
 const SECRET_KEY = process.env.SECRET_KEY || "shadow-dev";
@@ -21,10 +20,10 @@ Parameters: -none
 */
 function getDatabaseUri(user = DB_USER, password = DB_PASSWORD, host = DB_HOST, port = DB_PORT) {
     // log parameters vals
-    console.log('user: ', user);
-    console.log('password: ', password);
-    console.log('host: ', host);
-    console.log('port: ', port);
+    // console.log('user: ', user);
+    // console.log('password: ', password);
+    // console.log('host: ', host);
+    // console.log('port: ', port);
 
     // env vars
     // const u = process.env.DB_USER;
@@ -35,7 +34,7 @@ function getDatabaseUri(user = DB_USER, password = DB_PASSWORD, host = DB_HOST, 
     // database name depends on app's environment
     const name = process.env.NODE_ENV === "test" ? "airdnd_test" : "airdnd";
 
-    console.log(`postgres://${user}:${password}@${host}:${port}/${name}`);
+    // console.log(`postgres://${user}:${password}@${host}:${port}/${name}`);
 
     return `postgres://${user}:${password}@${host}:${port}/${name}`;
 };
@@ -44,13 +43,13 @@ function getDatabaseUri(user = DB_USER, password = DB_PASSWORD, host = DB_HOST, 
 const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === "test" ? 1 : 12;
 
 // Log config settings to the console
-console.log("-------------------------------------------");
-console.log("airdnd Config:");
-console.log("SECRET_KEY: ", SECRET_KEY);
-// console.log("PORT: ", PORT.toString());
-console.log("BCRYPT_WORK_FACTOR: ", BCRYPT_WORK_FACTOR);
-console.log("Database: ", getDatabaseUri());
-console.log("-------------------------------------------");
+// console.log("-------------------------------------------");
+// console.log("airdnd Config:");
+// console.log("SECRET_KEY: ", SECRET_KEY);
+// // console.log("PORT: ", PORT.toString());
+// console.log("BCRYPT_WORK_FACTOR: ", BCRYPT_WORK_FACTOR);
+// console.log("Database: ", getDatabaseUri());
+// console.log("-------------------------------------------");
 
 // Exports
 module.exports = {

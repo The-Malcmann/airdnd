@@ -107,89 +107,98 @@ class User {
         return result.rows;
     }
 
-     /** Given a username, return data about user.
-   *
-   * Returns { username, first_name, last_name, is_admin, jobs }
-   *   where jobs is { id, title, company_handle, company_name, state }
-   *
-   * Throws NotFoundError if user not found.
-   **/
+    /** Given a username, return data about user.
+  *
+  * Returns { username, first_name, last_name, is_admin, jobs }
+  *   where jobs is { id, title, company_handle, company_name, state }
+  *
+  * Throws NotFoundError if user not found.
+  **/
 
-  static async get(username) {
-    const userRes = await db.query(
-          `SELECT username,
+    static async get(username) {
+        const userRes = await db.query(
+            `SELECT username,
                   email,
-                  is_admin AS "isAdmin"
+                  is_admin AS "isAdmin",
+                  pref_remote as "prefRemote",
+                  pref_in_person as "prefInPerson",
+                  can_dm as "canDm"
            FROM users
            WHERE username = $1`,
-        [username],
-    );
+            [username],
+        );
 
-    const user = userRes.rows[0];
+        const user = userRes.rows[0];
 
-    if (!user) throw new NotFoundError(`No user: ${username}`);
+        if (!user) throw new NotFoundError(`No user: ${username}`);
 
-    return user;
-  }
-
-  /** Update user data with `data`.
-   *
-   * This is a "partial update" --- it's fine if data doesn't contain
-   * all the fields; this only changes provided ones.
-   *
-   * Data can include:
-   *   { firstName, lastName, password, email, isAdmin }
-   *
-   * Returns { username, firstName, lastName, email, isAdmin }
-   *
-   * Throws NotFoundError if not found.
-   *
-   * WARNING: this function can set a new password or make a user an admin.
-   * Callers of this function must be certain they have validated inputs to this
-   * or a serious security risks are opened.
-   */
-
-  static async update(username, data) {
-    if (data.password) {
-      data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
+        return user;
     }
 
-    const { setCols, values } = sqlForPartialUpdate(
-        data,
-        {
-          isAdmin: "is_admin",
-        });
-    const usernameVarIdx = "$" + (values.length + 1);
+    /** Update user data with `data`.
+     *
+     * This is a "partial update" --- it's fine if data doesn't contain
+     * all the fields; this only changes provided ones.
+     *
+     * Data can include:
+     *   { firstName, lastName, password, email, isAdmin }
+     *
+     * Returns { username, firstName, lastName, email, isAdmin }
+     *
+     * Throws NotFoundError if not found.
+     *
+     * WARNING: this function can set a new password or make a user an admin.
+     * Callers of this function must be certain they have validated inputs to this
+     * or a serious security risks are opened.
+     */
 
-    const querySql = `UPDATE users 
+    static async update(username, data) {
+        if (data.password) {
+            data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
+        }
+
+        const { setCols, values } = sqlForPartialUpdate(
+            data,
+            {
+                isAdmin: "is_admin",
+                prefRemote: "pref_remote",
+                prefInPerson: "pref_in_person",
+                canDm: "can_dm"
+            });
+        const usernameVarIdx = "$" + (values.length + 1);
+
+        const querySql = `UPDATE users 
                       SET ${setCols} 
                       WHERE username = ${usernameVarIdx} 
                       RETURNING username,
                                 email,
-                                is_admin AS "isAdmin"`;
-    const result = await db.query(querySql, [...values, username]);
-    const user = result.rows[0];
+                                is_admin AS "isAdmin",
+                                pref_remote as "prefRemote",
+                                pref_in_person as "prefInPerson",
+                                can_dm as "canDm"`;
+        const result = await db.query(querySql, [...values, username]);
+        const user = result.rows[0];
 
-    if (!user) throw new NotFoundError(`No user: ${username}`);
+        if (!user) throw new NotFoundError(`No user: ${username}`);
 
-    delete user.password;
-    return user;
-  }
+        delete user.password;
+        return user;
+    }
 
-   /** Delete given user from database; returns undefined. */
+    /** Delete given user from database; returns undefined. */
 
-   static async remove(username) {
-    let result = await db.query(
-          `DELETE
+    static async remove(username) {
+        let result = await db.query(
+            `DELETE
            FROM users
            WHERE username = $1
            RETURNING username`,
-        [username],
-    );
-    const user = result.rows[0];
+            [username],
+        );
+        const user = result.rows[0];
 
-    if (!user) throw new NotFoundError(`No user: ${username}`);
-  }
+        if (!user) throw new NotFoundError(`No user: ${username}`);
+    }
 
 }
 module.exports = User;

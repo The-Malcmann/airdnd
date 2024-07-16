@@ -105,7 +105,6 @@ describe("remove", function () {
         try {
             await Member.remove('u3', 1);
         } catch (err) {
-            console.log(err)
             expect (err instanceof NotFoundError).toBeTruthy()
         }
     })

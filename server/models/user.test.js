@@ -107,7 +107,7 @@ describe("register", function () {
 describe("findAll", function () {
     test("works", async function () {
         const users = await User.findAll();
-        console.log("users", users)
+        // console.log("users", users)
         expect(users).toEqual([
             {
                 username: "admin",
@@ -132,6 +132,10 @@ describe("get", function () {
       username: "u1",
       email: "u1@email.com",
       isAdmin: false,
+      prefRemote: false,
+      prefInPerson: false,
+      canDm: false
+
     });
   });
 
@@ -158,6 +162,9 @@ describe("update", function () {
     expect(job).toEqual({
       username: "u1",
       ...updateData,
+      prefRemote: false,
+      prefInPerson: false,
+      canDm: false
     });
   });
 
@@ -169,6 +176,9 @@ describe("update", function () {
       username: "u1",
       email: "u1@email.com",
       isAdmin: false,
+      prefRemote: false,
+      prefInPerson: false,
+      canDm: false
     });
     const found = await db.query("SELECT * FROM users WHERE username = 'u1'");
     expect(found.rows.length).toEqual(1);
