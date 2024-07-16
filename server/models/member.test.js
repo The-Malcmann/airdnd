@@ -62,7 +62,6 @@ describe("get", function() {
         try {
             await Member.get('u3', 1);
         } catch (err) {
-            console.log(err)
             expect (err instanceof NotFoundError).toBeTruthy()
         }
     })
@@ -85,7 +84,6 @@ describe("update", function () {
         try {
             await Member.update('u1', 1, {});
         } catch (err) {
-            console.log(err)
             expect(err instanceof BadRequestError).toBeTruthy();
         }
     })
@@ -93,7 +91,6 @@ describe("update", function () {
         try {
             await Member.update('u3', 1, {isDm: false});
         } catch (err) {
-            console.log(err)
             expect (err instanceof NotFoundError).toBeTruthy()
         }
     })
@@ -103,5 +100,13 @@ describe("remove", function () {
     test("works", async function () {
         const removedMember = await Member.remove('u1', 1);
         expect(removedMember).toEqual({userId: 'u1', groupId: 1})
+    })
+    test("not found error if member can't be found", async function () {
+        try {
+            await Member.remove('u3', 1);
+        } catch (err) {
+            console.log(err)
+            expect (err instanceof NotFoundError).toBeTruthy()
+        }
     })
 })
