@@ -14,6 +14,7 @@ class Member {
         if (!userId || !groupId) {
             throw new BadRequestError("must specify a userId (username) and a groupId");
         }
+       
         // if (typeof userId != "string" || typeof groupId != "number") {
         //     throw new BadRequestError("userId (username) must be a string and groupId must be a number");
         // }
@@ -26,13 +27,11 @@ class Member {
             [userId, groupId, isAccepted]
         );
         const member = result.rows[0]
-        const currentPlayers = (await Group.get(groupId)).currentPlayers
-        console.log("currentPlayers", currentPlayers)
-        console.log("newCurrentPlayers", currentPlayers+1)
-
-
-        // increase current players total for given group
-        await Group.update(groupId, { currentPlayers: currentPlayers + 1 })
+       
+        
+        // const currentPlayers = (await Group.get(groupId)).currentPlayers
+        // // increase current players total for given group
+        // await Group.update(groupId, { currentPlayers: currentPlayers + 1 })
 
         return member;
 
@@ -61,6 +60,7 @@ class Member {
             `, [
             userId, acceptedStatus
         ]);
+        console.log(result.rows);
         return result.rows;
     }
 

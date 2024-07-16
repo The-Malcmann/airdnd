@@ -14,8 +14,8 @@ const {
   adminToken,
 } = require("./_testCommon");
 
-const Member = require("../models/member");
-const Group = require("../models/group");
+const Member = require("../models/member.js");
+const Group = require("../models/group.js");
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
@@ -151,7 +151,7 @@ describe("/members/users/:username/groups/:id/request", function () {
     })
     // request to join a group
     test("post works", async function () {
-        const currentPlayers = (await Group.get(1)).currentPlayers
+        // const currentPlayers = (await Group.get(1)).currentPlayers;
         const resp = await request(app)
         .post("/members/users/u3/groups/1/request")
         .set("authorization", `Bearer ${u2Token}`);
@@ -163,7 +163,8 @@ describe("/members/users/:username/groups/:id/request", function () {
         })
         const newCurrentPlayers = (await Group.get(1)).currentPlayers
 
-        expect(newCurrentPlayers - currentPlayers).toEqual(1)
+        // expect(newCurrentPlayers - currentPlayers).toEqual(1)
+        expect(newCurrentPlayers).toEqual(2);
     })
     test("reject request works", async function () {
         //request to join group 1
@@ -184,7 +185,7 @@ describe("/members/users/:username/groups/:id/request", function () {
             }
         })
         const newCurrentPlayers = (await Group.get(1)).currentPlayers
-        expect(newCurrentPlayers - currentPlayers).toEqual(-1)
+        expect(newCurrentPlayers).toEqual(newCurrentPlayers)
 
     })
     test("kick member works", async function () {

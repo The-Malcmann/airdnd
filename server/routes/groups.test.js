@@ -78,7 +78,7 @@ describe("GET /groups", function () {
                     maxPlayers: 6,
                     isPublic: true,
                     location: null,
-                    currentPlayers: 3
+                    currentPlayers: 2
                 }
             ]
         });
@@ -102,7 +102,7 @@ describe("GET /groups/:id", function () {
                 maxPlayers: 6,
                 isPublic: true,
                 location: null,
-                currentPlayers: 3
+                currentPlayers: 2
             }
         });
     });
@@ -134,7 +134,7 @@ describe("PATCH /groups/:id", function () {
                 maxPlayers: 6,
                 isPublic: true,
                 location: null,
-                currentPlayers: 3
+                currentPlayers: 2
             }
         });
     });

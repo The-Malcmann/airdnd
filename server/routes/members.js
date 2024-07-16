@@ -79,7 +79,9 @@ router.patch("/users/:username/groups/:id/request", authenticateJWT, ensureHost,
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);
         }
-        const request = await Member.update(req.params.username, req.params.id, { isAccepted: true })
+        const request = await Member.update(req.params.username, req.params.id, { isAccepted: true });
+        const { currentPlayers } = await Group.get(req.params.id);
+        await Group.update(req.params.id, {currentPlayers: currentPlayers + 1});
         return res.json({ request })
     } catch (err) {
         return next(err);
@@ -89,8 +91,15 @@ router.patch("/users/:username/groups/:id/request", authenticateJWT, ensureHost,
 //deny join request or kick a user from group
 router.delete("/users/:username/groups/:id/request", authenticateJWT, ensureHost, async function (req, res, next) {
     try {
+        const isAcceptedRequest = (await Member.get(req.params.username, req.params.id))
+        const isAccepted = isAcceptedRequest.isAccepted
         const request = await Member.remove(req.params.username, req.params.id);
 
+        if(isAccepted) {
+            const { currentPlayers } = await Group.get(req.params.id);
+            await Group.update(req.params.id, {currentPlayers: currentPlayers - 1});
+        }
+        
         return res.json({ request })
 
     } catch (err) {

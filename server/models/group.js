@@ -66,7 +66,6 @@ class Group {
             `;
     // try to insert into groups
     const query = await db.query(queryString, [...values]);
-
     // return result of query
     return query.rows[0];
    }

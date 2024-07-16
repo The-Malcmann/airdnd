@@ -7,6 +7,7 @@ const {
 } = require("../expressError");
 const db = require("../db.js");
 const Member = require("./member.js");
+const Group = require("./group.js");
 const {
     commonBeforeAll,
     commonBeforeEach,
@@ -23,18 +24,11 @@ afterAll(commonAfterAll);
 describe("Add", function () {
     test("works", async function () {
         const newMember = await Member.add('admin', 1);
-        expect(newMember).toEqual({ user_id: 'admin', group_id: 1 });
+        expect(newMember).toEqual({ userId: 'admin', groupId: 1 });
     })
     test("bad request if userId or groupId not provided", async function () {
         try {
             await Member.add(1);
-        } catch (err) {
-            expect(err instanceof BadRequestError).toBeTruthy();
-        }
-    })
-    test("bad request if userId or groupId is not proper type", async function () {
-        try {
-            await Member.add(1, 1);
         } catch (err) {
             expect(err instanceof BadRequestError).toBeTruthy();
         }

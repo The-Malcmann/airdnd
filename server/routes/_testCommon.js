@@ -46,8 +46,9 @@ async function commonBeforeAll() {
     isRemote: true,
     maxPlayers: 6,
     isPublic: true,
+    currentPlayers: 2
   });
-
+  
   await Member.add("u1", 1, true);
   await Member.add("u2", 1, false);
 }

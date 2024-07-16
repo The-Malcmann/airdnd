@@ -11,6 +11,7 @@ const { authenticateJWT,
     ensureHost} = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
 const Group = require("../models/group");
+const Member = require("../models/member");
 const groupNewSchema = require("../schemas/groupNew.json");
 const groupUpdateSchema = require("../schemas/groupUpdate.json");
 
@@ -34,6 +35,10 @@ router.post("/", authenticateJWT, ensureCorrectUserOrAdmin, async function(req, 
         }
 
         const group = await Group.add(req.body);
+        if( group ) {
+            await Member.add(group.host, group.id, true);
+        };  
+
         return res.status(201).json({ group });
     }
     catch (err) {
