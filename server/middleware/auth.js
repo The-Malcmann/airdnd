@@ -74,7 +74,6 @@ function ensureAdmin(req, res, next) {
 function ensureCorrectUserOrAdmin(req, res, next) {
   try {
     const user = res.locals.user;
-
     // console.log("ensureCorrectUserOrAdmin res.locals: ", res.locals);
     // console.log("ensureCorrectUserOrAdmin res.locals.user: ", user);
     // console.log("ensureCorrectUserOrAdmin res.locals.user.username: ", user.username);

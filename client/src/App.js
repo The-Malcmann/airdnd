@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate, Outlet } from 'react-router-dom';
 
 function App() {
   const [username, setUsername] = useState();
@@ -14,7 +14,7 @@ function App() {
   return (
     <Router>
       <nav style={{ margin: 10 }}>
-        <Link to="/" style={{ padding: 5 }}>
+        <Link to="/groups" style={{ padding: 5 }}>
           Groups
         </Link>
         <Link to="/profile" style={{ padding: 5 }}>
@@ -28,7 +28,8 @@ function App() {
         </Link>
       </nav>
       <Routes>
-        <Route path="/" element={<Groups />} />
+        <Route path="groups" element={<Groups username={username}/>} />
+        <Route path="/groups/add" element={<AddGroup username={username}/>}/>
         <Route path="/profile" element={<Profile username={username} />} />
         <Route path="/register" element={<Register login={handleLogin} />} />
         <Route path="/login" element={<Login login={handleLogin} />} />
@@ -37,7 +38,7 @@ function App() {
   );
 }
 
-const Groups = () => {
+const Groups = ({username}) => {
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -55,26 +56,70 @@ const Groups = () => {
         {data ? (
           data.map(item => (
             <div>
-              <h1>{item.host}'s Group</h1>
+              <h1>{item.title}</h1>
+              <h1>Host: {item.host}</h1>
               <h2>{item.groupId}</h2>
             </div>
           ))) : (<div></div>)}
 
       </section>
+      <div>
+        <Link to="add">New Group</Link>
+      </div>
+      <Outlet />
     </section>
   )
 }
 
+const AddGroup = ({username}) => {
+  const INITIALSTATE = {title: "", description: "", host: username,gameEdition: "", isRemote: false}
+  const [formData, setFormData] = useState(INITIALSTATE);
+  const token = localStorage.getItem("token");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(data => ({
+      ...data,
+      [name]: value
+    }));
+  }
+  const handleCheckbox = (e) => {
+    const {checked} = e.target;
+    setFormData(data => ({
+      ...data,
+      isRemote: checked
+    }));
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log(formData)
+      const res = await axios.post(`/groups`, formData, { headers: { Authorization: `Bearer ${token}` } });
+      console.log(res);
+    } catch(err) {
+      console.log(err)
+    }
+  }
+  return (
+    <section>
+      <div>New Group</div>
+      <form onSubmit={handleSubmit}>
+        <input name="title" type="text" placeholder="Title" onChange={handleChange}/>
+        <input name="description" type="text" placeholder="Description" onChange={handleChange}/>
+        <input name="gameEdition" type="text" placeholder="Edition" onChange={handleChange}/>
+        <input name="remote" type="checkbox" onChange={handleCheckbox}/>
+        <label htmlFor="remote">Remote?</label>
+        <button name="submit" type="submit" >Submit</button>
+      </form>
+    </section>
+  )
+}
 const Profile = ({ username }) => {
   const [data, setData] = useState();
   const token = localStorage.getItem("token");
   useEffect(() => {
     async function getUser(username) {
-      console.log(token)
-      console.log(username)
       const res = await axios.get(`/users/${username}`, { headers: { Authorization: `Bearer ${token}` } });
       setData(res.data)
-      console.log(res.data)
     }
     getUser(username)
   }, []);
@@ -118,7 +163,7 @@ const Register = ({ login }) => {
       const token = res.data.token
       login(user, token);
       setFormData(INITIAL_STATE);
-      navigate("/");
+      navigate("/groups");
     } catch (err) {
       console.log(err)
     }
@@ -156,7 +201,7 @@ const Login = ({ login }) => {
       const token = res.data.token
       login(user, token);
       setFormData(INITIAL_STATE);
-      navigate("/");
+      navigate("/groups");
     } catch (err) {
       console.log(err)
     }

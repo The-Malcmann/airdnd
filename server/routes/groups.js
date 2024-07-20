@@ -26,7 +26,7 @@ const router = express.Router();
  * 
  * Auth: logged in or admin
  */
-router.post("/", authenticateJWT, ensureCorrectUserOrAdmin, async function(req, res, next) {
+router.post("/", authenticateJWT, ensureLoggedIn, async function(req, res, next) {
     try {
         const validator = jsonschema.validate(req.body, groupNewSchema);
         if(!validator.valid) {
