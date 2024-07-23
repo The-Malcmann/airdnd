@@ -9,17 +9,11 @@ import {
   Routes,
   Outlet,
   Link,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
 function App() {
-  const [username, setUsername] = useState();
-  const handleLogin = (user, token) => {
-    setUsername(user.username);
-    localStorage.setItem("username", username)
-    localStorage.setItem("token", token);
-  }
-
+  const { username, token } = useContext(AuthContext)
   return (
     <Router>
       <nav style={{ margin: 10 }}>
@@ -32,9 +26,15 @@ function App() {
         <Link to="/register" style={{ padding: 5 }}>
           Register
         </Link>
-        <Link to="/login" style={{ padding: 5 }}>
-          Login
-        </Link>
+        {username ?
+          <Link to="/logout" style={{ padding: 5 }}>
+            Logout
+          </Link> :
+          <Link to="/login" style={{ padding: 5 }}>
+            Login
+          </Link>
+        }
+
       </nav>
       <Routes>
         <Route path="groups" element={<Groups />} />
@@ -42,6 +42,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
+
       </Routes>
     </Router>
   );
@@ -130,7 +132,7 @@ const Profile = () => {
 
   useEffect(() => {
     async function getUser(username, token) {
-      if(!username || !token) return
+      if (!username || !token) return
       console.log("token:", token)
       console.log("username:", username)
       const res = await axios.get(`/users/${username}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -229,6 +231,25 @@ const Login = () => {
         <input type="text" placeholder="password" name="password" onChange={handleChange} />
         {/* <input type="email" placeholder="email" name="email" onChange={handleChange} /> */}
         <button type="submit" />
+      </form>
+    </section>
+  )
+}
+
+const Logout = () => {
+  const { logout } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    logout();
+    navigate("/login");
+  }
+
+  return (
+    <section>
+      <form onSubmit={handleSubmit}>
+        <button type="submit">Logout</button>
       </form>
     </section>
   )
