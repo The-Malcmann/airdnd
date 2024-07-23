@@ -8,7 +8,6 @@ const {
     BadRequestError,
     UnauthorizedError,
 } = require("../expressError");
-const Group = require("./group")
 class Member {
     static async add(userId, groupId, isAccepted) {
         if (!userId || !groupId) {
@@ -53,8 +52,9 @@ class Member {
 
     static async findAllGroupsForMember(userId, acceptedStatus) {
         const result = await db.query(`
-            SELECT user_id as "userId", group_id AS "groupId", is_accepted as "isAccepted", is_dm as "isDm"
+            SELECT user_id as "userId", group_id AS "groupId", title, is_accepted as "isAccepted", is_dm as "isDm"
             FROM members
+            JOIN groups on members.group_id = groups.id
             WHERE user_id = $1 AND is_accepted = $2 
             ORDER BY group_id
             `, [
@@ -116,9 +116,6 @@ class Member {
         const member = result.rows[0];
 
         if (!member) throw new NotFoundError(`No member: ${userId}, ${groupId}`);
-        const currentPlayers = (await Group.get(groupId)).currentPlayers
-        // increase current players total for given group
-        await Group.update(groupId, { currentPlayers: currentPlayers - 1 })
         return member
     }
 }

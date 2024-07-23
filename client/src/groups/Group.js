@@ -22,8 +22,6 @@ const Group = () => {
       async function getMembers() {
         if (!token || !username) return
         const res = await axios.get(`/members/groups/${params.id}`, { headers: { Authorization: `Bearer ${token}` } })
-        console.log('here')
-        console.log(res)
         setActiveMembers(res.data.activeMembers)
         setPendingMembers(res.data.pendingMembers)
       }
@@ -36,13 +34,23 @@ const Group = () => {
       setChangedGroup(false)
       const res = await axios.post(`/members/users/${username}/groups/${group.id}/request`, {}, { headers: { Authorization: `Bearer ${token}` } })
       setChangedGroup(true)
-      console.log(res)
     }
   
     const approveRequest = async (username) => {
       setChangedGroup(false)
       const res = await axios.patch(`/members/users/${username}/groups/${group.id}/request`, {}, { headers: { Authorization: `Bearer ${token}` } })
       setChangedGroup(true)
+    }
+
+    const removeUser = async (username) => {
+      setChangedGroup(false)
+      const res = await axios.delete(`/members/users/${username}/groups/${group.id}/request`, { headers: { Authorization: `Bearer ${token}` } })
+      setChangedGroup(true)
+    }
+
+    const deleteGroup = async () => {
+      const res = await axios.delete(`/groups/${group.id}`, { headers: { Authorization: `Bearer ${token}` } })
+      navigate("/groups")
     }
     const isInGroup = () => {
       if(!pendingMembers || !activeMembers) return;
@@ -66,6 +74,8 @@ const Group = () => {
                 (activeMembers.map(item => (
                   <div>
                     <p>{item.userId}</p>
+                    
+                    {item.userId == group.host? <div></div> : <button onClick={() => removeUser(item.userId)}>Kick User</button>}
                   </div>
                 )))
                 : <div></div>}
@@ -76,11 +86,13 @@ const Group = () => {
                   <div>
                     <p>{item.userId}</p>
                     <button onClick={() => approveRequest(item.userId)}>Approve User</button>
+                    <button onClick={() => removeUser(item.userId)}>Reject User</button>
                   </div>
                 )))
                 : <div></div>}
               <h1>Group size: {group.currentPlayers}</h1>
             </div>
+            <button onClick={deleteGroup}>Delete Group</button>
           </div>
         </div>
       )

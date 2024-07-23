@@ -1,9 +1,11 @@
 import React, { useState, useContext, act } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth';
 
 const AddGroup = () => {
     const { username } = useContext(AuthContext)
+    const navigate = useNavigate();
     const INITIALSTATE = { title: "", description: "", host: username, gameEdition: "", isRemote: false }
     const [formData, setFormData] = useState(INITIALSTATE);
     const token = localStorage.getItem("token");
@@ -24,9 +26,8 @@ const AddGroup = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        console.log(formData)
         const res = await axios.post(`/groups`, formData, { headers: { Authorization: `Bearer ${token}` } });
-        console.log(res);
+        navigate("/groups")
       } catch (err) {
         console.log(err)
       }

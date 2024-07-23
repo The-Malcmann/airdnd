@@ -6,7 +6,7 @@ const jsonschema = require("jsonschema");
 
 const express = require("express");
 const { ensureCorrectUserOrAdmin, ensureAdmin, authenticateJWT, ensureLoggedIn, ensureHost } = require("../middleware/auth");
-const { BadRequestError } = require("../expressError");
+const { BadRequestError, ForbiddenError } = require("../expressError");
 const Member = require("../models/member");
 const Group = require("../models/group");
 const { createToken } = require("../helpers/tokens");
@@ -42,7 +42,6 @@ router.get("/users/:username/pending", authenticateJWT, ensureLoggedIn, async fu
 router.get("/groups/:id/", authenticateJWT, ensureLoggedIn, async function (req, res, next) {
     try {
         const activeMembers = await Member.findAllMembersForGroup(req.params.id, true);
-        console.log(activeMembers)
         const pendingMembers = await Member.findAllMembersForGroup(req.params.id, false);
         return res.json({ activeMembers, pendingMembers });
     } catch (err) {
@@ -80,8 +79,8 @@ router.patch("/users/:username/groups/:id/request", authenticateJWT, ensureHost,
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);
         }
-        const request = await Member.update(req.params.username, req.params.id, { isAccepted: true });
         const member = await Member.get(req.params.username, req.params.id);
+        const request = await Member.update(req.params.username, req.params.id, { isAccepted: true });
         if(!member.isAccepted) {
             const { currentPlayers } = await Group.get(req.params.id);
             await Group.update(req.params.id, {currentPlayers: currentPlayers + 1});
@@ -96,11 +95,14 @@ router.patch("/users/:username/groups/:id/request", authenticateJWT, ensureHost,
 router.delete("/users/:username/groups/:id/request", authenticateJWT, ensureHost, async function (req, res, next) {
     try {
         const isAcceptedRequest = (await Member.get(req.params.username, req.params.id))
+        console.log(isAcceptedRequest)
+        const { currentPlayers, host } = await Group.get(req.params.id);
+        if(req.params.username == host) throw new ForbiddenError()
+
         const isAccepted = isAcceptedRequest.isAccepted
         const request = await Member.remove(req.params.username, req.params.id);
 
         if(isAccepted) {
-            const { currentPlayers } = await Group.get(req.params.id);
             await Group.update(req.params.id, {currentPlayers: currentPlayers - 1});
         }
         
