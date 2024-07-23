@@ -1,22 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
-import axios from 'axios';
-import React, { useState, useEffect, useContext, act } from 'react';
+import React, { useContext } from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Link,
-  useNavigate,
 } from "react-router-dom";
 import { AuthContext } from './auth';
 import Groups from "./groups/Groups";
 import Group from "./groups/Group";
 import AddGroup from "./groups/AddGroup";
 import Profile from "./profile/Profile";
-import Register from"./auth/Register";
-import Login from"./auth/Login";
-import Logout from"./auth/Logout";
+import Register from "./auth/Register";
+import Login from "./auth/Login";
+import Logout from "./auth/Logout";
 
 function App() {
   const { username, token } = useContext(AuthContext)
@@ -47,7 +44,6 @@ function App() {
       <Routes>
         <Route path="/groups" element={<Groups />} />
         <Route path="/groups/:id" element={<Group />} />
-
         <Route path="/groups/add" element={<AddGroup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />

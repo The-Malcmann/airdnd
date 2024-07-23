@@ -21,7 +21,7 @@ CREATE TABLE groups (
     max_players INT DEFAULT 7, 
     is_public BOOLEAN DEFAULT TRUE,
     location VARCHAR(75),
-    current_players INT DEFAULT 0
+    current_players INT DEFAULT 1
 );
 
 CREATE TABLE members (
