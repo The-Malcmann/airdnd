@@ -20,7 +20,6 @@ const router = express.Router();
 /** POST /
  * Adds a new group.
  * 
- * TODO: add host from new group to members
  * 
  * Returns: {group: {id, host, gameEdition, isActive, isRemote, maxPlayers, isPublic, location}}
  * 

@@ -42,6 +42,7 @@ router.get("/users/:username/pending", authenticateJWT, ensureLoggedIn, async fu
 router.get("/groups/:id/", authenticateJWT, ensureLoggedIn, async function (req, res, next) {
     try {
         const activeMembers = await Member.findAllMembersForGroup(req.params.id, true);
+        console.log(activeMembers)
         const pendingMembers = await Member.findAllMembersForGroup(req.params.id, false);
         return res.json({ activeMembers, pendingMembers });
     } catch (err) {
@@ -80,8 +81,11 @@ router.patch("/users/:username/groups/:id/request", authenticateJWT, ensureHost,
             throw new BadRequestError(errs);
         }
         const request = await Member.update(req.params.username, req.params.id, { isAccepted: true });
-        const { currentPlayers } = await Group.get(req.params.id);
-        await Group.update(req.params.id, {currentPlayers: currentPlayers + 1});
+        const member = await Member.get(req.params.username, req.params.id);
+        if(!member.isAccepted) {
+            const { currentPlayers } = await Group.get(req.params.id);
+            await Group.update(req.params.id, {currentPlayers: currentPlayers + 1});
+        } 
         return res.json({ request })
     } catch (err) {
         return next(err);

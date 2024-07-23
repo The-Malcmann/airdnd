@@ -100,7 +100,7 @@ class Member {
         const updatedMember = updateQuery.rows[0];
 
         if (updateQuery.rowCount == 0) throw new NotFoundError(`No member: ${userId}, ${groupId}`)
-
+        console.log(updatedMember)
 
         return updateQuery.rows[0]
     }

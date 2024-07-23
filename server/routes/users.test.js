@@ -251,7 +251,6 @@ describe("PATCH /users/:username", () => {
         .patch(`/users/u1`)
         .send({
           prefRemote: true,
-
         })
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.body).toEqual({

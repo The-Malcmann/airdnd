@@ -77,7 +77,6 @@ describe("/members/users/:username/pending", function () {
         const resp = await request(app)
         .get("/members/users/u2/pending")
         .set("authorization", `Bearer ${u1Token}`);
-    
         expect(resp.body).toEqual({
             groups: [
                 {
@@ -136,7 +135,9 @@ describe("/members/users/:username/groups/:id/request", function () {
                 isAccepted: true,
                 isDm: false
             }
-        })
+        })        
+        const resp2 = await request(app).get("/members/groups/1").set("authorization", `Bearer ${u1Token}`);
+        console.log(resp2)
         expect(resp.statusCode).toEqual(200);
       
 
