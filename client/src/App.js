@@ -20,12 +20,15 @@ function App() {
         <Link to="/groups" style={{ padding: 5 }}>
           Groups
         </Link>
-        <Link to="/profile" style={{ padding: 5 }}>
-          Profile
-        </Link>
-        <Link to="/register" style={{ padding: 5 }}>
-          Register
-        </Link>
+        {username ?
+          <Link to="/profile" style={{ padding: 5 }}>
+            Profile
+          </Link> :
+          <Link to="/register" style={{ padding: 5 }}>
+            Register
+          </Link>
+
+        }
         {username ?
           <Link to="/logout" style={{ padding: 5 }}>
             Logout
@@ -230,7 +233,7 @@ const Login = () => {
         <input type="text" placeholder="username" name="username" onChange={handleChange} />
         <input type="text" placeholder="password" name="password" onChange={handleChange} />
         {/* <input type="email" placeholder="email" name="email" onChange={handleChange} /> */}
-        <button type="submit" />
+        <button type="submit">Login</button>
       </form>
     </section>
   )
