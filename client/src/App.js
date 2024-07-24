@@ -15,14 +15,15 @@ import Register from "./auth/Register";
 import Login from "./auth/Login";
 import Logout from "./auth/Logout";
 import Nav from "./Nav"
+import Header from "./Header"
 
 function App() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 650);
-  let lastScrollY = window.scrollY;
+  
   useEffect(() => {
     const handleResize = () => {
-      setIsLargeScreen(window.innerWidth > 650);
+      setIsLargeScreen(window.innerWidth > 743);
     };
 
     let lastScrollY = window.scrollY;
@@ -44,7 +45,8 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Nav isVisible={isNavbarVisible} />
+        <Header isLargeScreen={isLargeScreen}/>
+        <Nav isVisible={isNavbarVisible} isLargeScreen={isLargeScreen} />
         <main>
           <Routes>
             <Route path="/" element={<Groups />} />
