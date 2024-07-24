@@ -27,7 +27,7 @@ const AddGroup = () => {
       e.preventDefault();
       try {
         const res = await axios.post(`/groups`, formData, { headers: { Authorization: `Bearer ${token}` } });
-        navigate("/groups")
+        navigate("/")
       } catch (err) {
         console.log(err)
       }

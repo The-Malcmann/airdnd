@@ -20,7 +20,7 @@ const Groups = () => {
         <section>
           {data ? (
             data.map(item => (
-              <button onClick={() => navigate(`${item.id}`)}>
+              <button onClick={() => navigate(`/groups/${item.id}`)}>
                 <div>
                   <h1>{item.title}</h1>
                   <h1>Host: {item.host}</h1>

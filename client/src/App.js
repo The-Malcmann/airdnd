@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -14,43 +14,50 @@ import Profile from "./profile/Profile";
 import Register from "./auth/Register";
 import Login from "./auth/Login";
 import Logout from "./auth/Logout";
+import Nav from "./Nav"
 
 function App() {
-  const { username, token } = useContext(AuthContext)
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 650);
+  let lastScrollY = window.scrollY;
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth > 650);
+    };
+
+    let lastScrollY = window.scrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsNavbarVisible(currentScrollY <= lastScrollY);
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <Router>
-      <nav style={{ margin: 10 }}>
-        <Link to="/groups" style={{ padding: 5 }}>
-          Groups
-        </Link>
-        {username ?
-          <Link to="/profile" style={{ padding: 5 }}>
-            Profile
-          </Link> :
-          <Link to="/register" style={{ padding: 5 }}>
-            Register
-          </Link>
-        }
-        {username ?
-          <Link to="/logout" style={{ padding: 5 }}>
-            Logout
-          </Link> :
-          <Link to="/login" style={{ padding: 5 }}>
-            Login
-          </Link>
-        }
+      <div className="App">
+        <Nav isVisible={isNavbarVisible} />
+        <main>
+          <Routes>
+            <Route path="/" element={<Groups />} />
+            <Route path="/groups/:id" element={<Group />} />
+            <Route path="/groups/add" element={<AddGroup />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
 
-      </nav>
-      <Routes>
-        <Route path="/groups" element={<Groups />} />
-        <Route path="/groups/:id" element={<Group />} />
-        <Route path="/groups/add" element={<AddGroup />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-
-      </Routes>
+          </Routes>
+        </main>
+      </div>
     </Router>
   );
 }

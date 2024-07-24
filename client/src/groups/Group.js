@@ -203,7 +203,7 @@ const Group = () => {
   }
   return (
     <div>
-      <button onClick={() => navigate("/groups")}>Back</button>
+      <button onClick={() => navigate("/")}>Back</button>
       {group ?
         isHost ?
           hostGroup() :
