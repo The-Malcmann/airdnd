@@ -18,12 +18,14 @@ header {
     height: var(--header-height);
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .header-layout {
     display: flex;
     flex: 1;
     justify-content:space-between;
+    max-width: 1760px;
     align-items: center;
     padding: 0 40px;
 }

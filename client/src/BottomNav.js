@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { AuthContext } from './auth';
 import { Link } from "react-router-dom";
-import "./Nav.css"
-const Nav = ({ isLargeScreen, isVisible }) => {
+import "./BottomNav.css"
+const BottomNav = ({ isLargeScreen, isVisible }) => {
     const { username, token } = useContext(AuthContext)
     return (
         <>
@@ -35,4 +35,4 @@ const Nav = ({ isLargeScreen, isVisible }) => {
     )
 }
 
-export default Nav;
+export default BottomNav;

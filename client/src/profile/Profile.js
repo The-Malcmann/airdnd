@@ -12,7 +12,6 @@ const Profile = () => {
   useEffect(() => {
     async function getUser() {
       if (!username || !token) return
-
       const res = await axios.get(`/users/${username}`, { headers: { Authorization: `Bearer ${token}` } });
       setData(res.data)
     }

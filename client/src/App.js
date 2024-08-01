@@ -14,7 +14,7 @@ import Profile from "./profile/Profile";
 import Register from "./auth/Register";
 import Login from "./auth/Login";
 import Logout from "./auth/Logout";
-import Nav from "./Nav"
+import BottomNav from "./BottomNav"
 import Header from "./Header"
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
     <Router>
       <div className="App">
         <Header isLargeScreen={isLargeScreen}/>
-        <Nav isVisible={isNavbarVisible} isLargeScreen={isLargeScreen} />
+        <BottomNav isVisible={isNavbarVisible} isLargeScreen={isLargeScreen} />
         <main>
           <Routes>
             <Route path="/" element={<Groups />} />

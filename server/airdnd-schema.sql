@@ -7,7 +7,8 @@ CREATE TABLE users (
     is_admin BOOLEAN DEFAULT FALSE,
     pref_remote BOOLEAN DEFAULT FALSE,
     pref_in_person BOOLEAN DEFAULT FALSE,
-    can_dm BOOLEAN DEFAULT FALSE
+    can_dm BOOLEAN DEFAULT FALSE,
+    image TEXT
 );
 
 CREATE TABLE groups (
@@ -21,7 +22,8 @@ CREATE TABLE groups (
     max_players INT DEFAULT 7, 
     is_public BOOLEAN DEFAULT TRUE,
     location VARCHAR(75),
-    current_players INT DEFAULT 1
+    current_players INT DEFAULT 1,
+    image TEXT DEFAULT ""
 );
 
 CREATE TABLE members (
