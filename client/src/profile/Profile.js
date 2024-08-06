@@ -7,7 +7,7 @@ const Profile = () => {
   const [activeGroups, setActiveGroups] = useState();
   const [pendingGroups, setPendingGroups] = useState();
   // const token = localStorage.getItem("token");
-  const { token, username } = useContext(AuthContext);
+  const { token, username, client } = useContext(AuthContext);
 
   useEffect(() => {
     async function getUser() {
@@ -22,6 +22,7 @@ const Profile = () => {
       console.log(resActive.data.groups)
       setActiveGroups(resActive.data.groups)
       setPendingGroups(resPending.data.groups)
+      console.log(client)
     }
     getUser()
     getGroups()

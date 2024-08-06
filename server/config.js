@@ -13,6 +13,8 @@ const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
 const PORT = process.env.PORT || 3001
+const API_KEY = process.env.API_KEY;
+const API_SECRET_KEY = process.env.API_SECRET_KEY
 
 /* Database Uri Function
  
@@ -58,5 +60,7 @@ module.exports = {
     BCRYPT_WORK_FACTOR,
     DB_PORT,
     PORT,
+    API_KEY,
+    API_SECRET_KEY,
     getDatabaseUri
 }

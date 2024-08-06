@@ -20,10 +20,9 @@ const Register = () => {
         e.preventDefault();
         try {
             const { username, password, email } = formData;
-            const user = { username, password, email };
             const res = await axios.post('/auth/register', formData);
-            const token = res.data.token
-            login(username, token);
+            const {token, chatToken} = res.data
+            login(username, token, chatToken);
             setFormData(INITIAL_STATE);
             navigate("/groups");
         } catch (err) {

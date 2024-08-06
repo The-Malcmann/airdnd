@@ -22,10 +22,11 @@ const Login = () => {
             const { username, password } = formData;
             // const user = { username: formData.username };
             const res = await axios.post('/auth/token', formData);
-            const token = res.data.token
-            login(username, token);
+            const {token, chatToken} = res.data
+
+            login(username, token, chatToken);
             setFormData(INITIAL_STATE);
-            navigate("/groups");
+            navigate("/");
         } catch (err) {
             console.log(err)
         }
