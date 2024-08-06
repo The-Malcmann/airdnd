@@ -1,16 +1,15 @@
 :root {
     --header-height: 60px;
+    --max-screen-width: 2520px;
 }
 
 .header-dropdown {
-    position: fixed;
-    right: 40px;
-    top: 60px;
     border: 1px solid black;
     width: 200px;
     display: flex;
     flex-direction: column;
 }
+
 
 header {
     position: fixed;
@@ -25,7 +24,7 @@ header {
     display: flex;
     flex: 1;
     justify-content:space-between;
-    max-width: 1760px;
+    max-width: var(--max-screen-width);
     align-items: center;
     padding: 0 40px;
 }
