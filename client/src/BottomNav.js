@@ -21,6 +21,12 @@ const BottomNav = ({ isLargeScreen, isVisible }) => {
                             </Link>
                         }
                         {username ?
+                            <Link to="/messages" style={{ padding: 5 }}>
+                                Messages
+                            </Link> :
+                            <></>
+                        }
+                        {username ?
                             <Link to="/logout" style={{ padding: 5 }} class="link">
                                 Logout
                             </Link> :

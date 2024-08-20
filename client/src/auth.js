@@ -60,7 +60,7 @@ const AuthProvider = ({ children }) => {
         setUsername("");
         setToken("");
         setChatToken("");
-        // client.disconnectUser()
+        client.disconnectUser()
     }
 
 

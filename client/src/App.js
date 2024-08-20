@@ -16,6 +16,7 @@ import Login from "./auth/Login";
 import Logout from "./auth/Logout";
 import BottomNav from "./BottomNav"
 import Header from "./Header"
+import Messages from './messages/Messages';
 
 function App() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
@@ -53,6 +54,7 @@ function App() {
             <Route path="/groups/:id" element={<Group />} />
             <Route path="/groups/add" element={<AddGroup />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/messages" element={<Messages />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />

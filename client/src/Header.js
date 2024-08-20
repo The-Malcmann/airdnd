@@ -69,6 +69,12 @@ function Header({ isLargeScreen }) {
                                     </Link>
                                 }
                                 {username ?
+                                    <Link to="/messages" style={{ padding: 5 }}>
+                                        Messages
+                                    </Link> :
+                                    <></>
+                                }
+                                {username ?
                                     <Link to="/logout" style={{ padding: 5 }} onClick={toggleMenu}>
                                         Logout
                                     </Link> :

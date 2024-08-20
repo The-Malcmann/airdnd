@@ -50,7 +50,7 @@ router.post("/", authenticateJWT, ensureAdmin, async function (req, res, next) {
  * Authorization required: admin
  **/
 
-router.get("/", authenticateJWT, ensureAdmin, async function (req, res, next) {
+router.get("/", authenticateJWT, ensureCorrectUserOrAdmin, async function (req, res, next) {
   try {
     const users = await User.findAll();
     return res.json({ users });
